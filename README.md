@@ -24,37 +24,22 @@ Y en cuanto a los distintos niveles de concentración de CO2 (en ppm) y sus efec
 - Hasta 5.000 ppm; concentración máxima aconsejable en el lugar de trabajo.
 - En concentraciones cercanas a los 30.000 ppm puede causar dolores de cabeza, falta de concentración, somnolencia, mareos y problemas respiratorios.
 
+![Escala](Escala.jpg)
 
+# Elementos requeridos:
+- 1x Arduino nano
+- 1x Sensor MQ-135
+- 1x DTH11
+- Beeper activo
+- Display de dos lineas con adaptador a I2C
+- Cables
+
+# Escquema:
 
 ![Esquema](Esquema.jpg)
 
-# Explicación en video:
-https://youtu.be/PpsqJBTnZ_4
-
-# Elementos requeridos:
-- 1x ESP8266 (NodeMCU) o ESP32
-- 1x Placa de Rele x1 rele
-- 1x fuente switching 5v
 
 # Pasos previos:
-Para poder conectar con Telegram, deberemos tener la librería <UniversalTelegramBot.h> instalada en nuestro entorno, para ello solo haremos clic en el menú "Programa" del Arduino IDE y luego "Incluir Librería" para por último seleccionar "Incluir Biblioteca .ZIP". Hecho esto nos dará a seleccionar un archivo en nuestra PC el cual será el .ZIP de nombre "Universal-Arduino-Telegram-Bot-master.zip" incluido en este repositorio.
+Antes de empezar deberemos instalar las librerías ubicadas en la capeta “Liberia” en nuestro entorno Arduino.
+Por lo demás solo es conectar, cargar el código y disfrutar.
 
-# Como crear un Bot en telegram:
-Para obtener un API Token y un Chat ID en Telegram deberemos abrir nuestro cliente Telegram tanto sea en nuestro móvil o en nuestra PC y buscaremos entre nuestros contactos al contacto BotFather.
-Una vez que lo seleccionemos como para iniciar una charla se nos abrirá una ventana pero en lugar de un campo de texto para escribir aparecerá un botón "INICIAR", al cual le haremos clic. Esto nos iniciara una instancia con BotFather el cual nos tirara una lista de comandos disponibles para crear o administrar nuestro bot. 
-
-De dicha lista deberemos hacer clic o bien escribir el comando "/newbot". 
-
-A continuación, nos solicitara que escribamos un nombre para el nuevo bot y de estar el nombre disponible nos dirá que le asignemos un nombre publico terminado con '_bot' ejemplo: DEMO100_bot
-
-Si todo salió bien BotFather nos enviara un mensaje indicando cual es el nombre del bot y cuál es nuestro API Token. Haremos clic en el link del chat, y apretaremos el botón iniciar. 
-
-Ya tenemos nuestro API Token por lo que falta obtener el ChatID, para ello iremos a la página:
-
-- https://api.telegram.org/bot000000:000000000000/getUpdates 
-
-en donde 000000:000000000000 es el API Token. 
-
-De estar todo OK nos abrirá un texto en formato JSON con un código 200 y la palabra OK.
-
-Ahora vamos al chat de Telegram en donde esta nuestro bot y escribiremos cualquier cosa, no importa el contenido del mensaje, es solo para actualizar el estatus del chat, hecho esto volveremos a la página antes abierta y daremos refrescar para ver que el JSON ahora es diferente, contiene más información, entre ella una clave llamada "ID": NUMERO DEL CHAT ID, siendo ese número el que deberemos incluir en el fuente a cargar en nuestra ESP8266 o ESP32.
