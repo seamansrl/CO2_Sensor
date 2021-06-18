@@ -24,7 +24,7 @@ Y en cuanto a los distintos niveles de concentración de CO2 (en ppm) y sus efec
 - Hasta 5.000 ppm; concentración máxima aconsejable en el lugar de trabajo.
 - En concentraciones cercanas a los 30.000 ppm puede causar dolores de cabeza, falta de concentración, somnolencia, mareos y problemas respiratorios.
 
-![Escala](Escala.jpg)
+![Escala](Escalas.jpg)
 
 # Elementos requeridos:
 - 1x Arduino nano
