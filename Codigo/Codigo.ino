@@ -28,6 +28,9 @@ LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 // PARAMETRIZO SENSOR DHT
 DHT dht(DHT_PIN, DHTTYPE);
 
+// DECLARO EL MQ-135
+MQ135 MQ135_SENSOR = MQ135(MQ135_PIN);
+
 // VARIABLES GLOBALES PARA PrintLCD
 String Last_Line1 = "";
 String Last_Line2 = "";
@@ -176,10 +179,10 @@ void loop() {
   float temperatura = dht.readTemperature() + DHT_OFFSET;
 
   // USO LOS DATOS DEL DTH11 PARA HACER CORRECCIONES DE MEDICION EN EL SENSOR MQ135 Y OBTENGO LAS PARTES POR MILLON DE CO2
-  float CO2_PPM = MQ135(MQ135_PIN).getCorrectedPPM(temperatura, humedad); 
+  float CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
 
   // PRESENTO LA INFORMACION EN PANTALLA
-  PrintLCD("CO2: " + String(CO2_PPM) + " PPM", String(humedad) + "%  " + String(temperatura) + "* C");
+  PrintLCD("CO2: " + String(CO2_PPM) + " PPM", String(humedad) + "%  " + String(temperatura) + "° C");
 
   // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, VALOR CONSIDERADO COMO EL MAXIMO SUPERIOR ACEPTABLE
   if (CO2_PPM > 800)
