@@ -26,6 +26,15 @@ Y en cuanto a los distintos niveles de concentración de CO2 (en ppm) y sus efec
 
 ![Escala](Escalas.jpg)
 
+# Por que decimos que sirve para controlar el contagio de COVID-19
+En la atmósfera, o sea, al aire libre, hay entre 350 y 450 partículas de CO2 por cada millón de partículas, eso significa que si estamos en un ambiente cerrado todo lo que esté por arriba de esos números está proveniendo de una fuente local. Asumimos que no estamos en un incendio ni trabajando con tubos de CO2 comprimidos o cualquier otra fuente, y por tanto lo único que quedaría que pueden generar CO2 son los seres vivos: humanos, animales, y plantas por la noche, pero excepto que vivas en un vivero es algo bastante despreciable.
+
+O sea que en horarios diurnos si nuestro ambiente tiene 800 partículas por millón es asumible pensar que al menos un promedio de 400 de ellas fueron exhaladas por otro ser vivo. Si en el ambiente solo hay humanos, serían exhalados por otro humano. O sea que 400 de cada 1000000 de partículas el 0,4% del aire respirado fue exhalado previamente por nosotros mismos o alguien más.
+
+El COVID-19 cae rápidamente al piso, por ello el usar tapabocas y mantener distancia es una forma relativamente buena de evitar el contagio, de estar en presencia de un enfermo de dicha patología (enfermo que podría ser asintomático). Aún así parte del spray exhalado aún queda en el aire, aquellas partículas más chicas y con menor masa, por tanto sin medimos el CO2 podemos tener una idea del grado de probabilidad de contagio al que nos sometemos al estar en el mismo ambiente cerrado con una persona contagiada que se encuentre a 2 metros de distancia y con tapabocas.
+
+En resumen: si cumplimos con el distanciamiento social y el uso de mascarilla en un ambiente cerrado con 600 partículas por millón de CO2, tendremos un 0.4% de probabilidad de contagio, obviamente esa probabilidad aumenta con la distancia entre personas, el no uso de mascarilla y un ambiente con más de 2000 ppm de CO2, no es solución definitiva pero sin un elemento más de control, el cual es muy bueno en épocas de frío en donde tener todo el día la ventana abierta puede ser más problema que solucion.
+
 # Elementos requeridos:
 - 1x Arduino nano
 - 1x Sensor MQ-135
