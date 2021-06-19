@@ -1,40 +1,40 @@
-#include "MQ135.h"
+#ifndef MQ135_H
+#define MQ135_H
+#if ARDUINO >= 100
+ #include "Arduino.h"
+#else
+ #include "WProgram.h"
+#endif
 
+/// RESISTENCIA DE LA PCB
+#define RLOAD 1.0
+/// CALIBRACION DE RESISTENCIA ADMOSFERICA
+#define RZERO 76.63
+/// PARAMETRO PARA CALCULAR PPM DE CO2
+#define PARA 116.6020682
+#define PARB 2.769034857
 
-MQ135::MQ135(uint8_t pin) {
-  _pin = pin;
-}
+/// PARAMETROS DE TEMPERATURA Y HUMEDAD SEGUN DATASHEET
+#define CORA 0.00035
+#define CORB 0.02718
+#define CORC 1.39538
+#define CORD 0.0018
 
-float MQ135::getCorrectionFactor(float t, float h) {
-  return CORA * t * t - CORB * t + CORC - (h-33.)*CORD;
-}
+/// NIVEL DE CO2 EN ATMOSFERA PARA CALIBRAR
+#define ATMOCO2 397.13
 
-float MQ135::getResistance() {
-  int val = analogRead(_pin);
-  return ((1023./(float)val) * 5. - 1.)*RLOAD;
-}
+class MQ135 {
+ private:
+  uint8_t _pin;
 
-
-float MQ135::getCorrectedResistance(float t, float h) {
-  return getResistance()/getCorrectionFactor(t, h);
-}
-
-
-float MQ135::getPPM() {
-  return PARA * pow((getResistance()/RZERO), -PARB);
-}
-
-
-float MQ135::getCorrectedPPM(float t, float h) {
-  return PARA * pow((getCorrectedResistance(t, h)/RZERO), -PARB);
-}
-
-
-float MQ135::getRZero() {
-  return getResistance() * pow((ATMOCO2/PARA), (1./PARB));
-}
-
-
-float MQ135::getCorrectedRZero(float t, float h) {
-  return getCorrectedResistance(t, h) * pow((ATMOCO2/PARA), (1./PARB));
-}
+ public:
+  MQ135(uint8_t pin);
+  float getCorrectionFactor(float t, float h);
+  float getResistance();
+  float getCorrectedResistance(float t, float h);
+  float getPPM();
+  float getCorrectedPPM(float t, float h);
+  float getRZero();
+  float getCorrectedRZero(float t, float h);
+};
+#endif
