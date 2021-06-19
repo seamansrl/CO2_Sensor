@@ -38,6 +38,18 @@ String Last_Line2 = "";
 int Line1_Position = 0;
 int Line2_Position = 0;
 
+// SIMBOLO DE GRADOS
+byte customChar[] = {
+  B01110,
+  B10001,
+  B10001,
+  B10001,
+  B01110,
+  B00000,
+  B00000,
+  B00000
+};
+
 // FUNCION CREADA PARA HACERME LA VIDA MAS SIMPLE CON LAS PANTALLAS LCD
 void PrintLCD(String Line1 = "", String Line2 = "")
 {
@@ -182,7 +194,7 @@ void loop() {
   float CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
 
   // PRESENTO LA INFORMACION EN PANTALLA
-  PrintLCD("CO2: " + String(CO2_PPM) + " PPM", String(humedad) + "%  " + String(temperatura) + "° C");
+  PrintLCD("CO2: " + String(CO2_PPM) + " PPM", String(humedad) + "%  " + String(temperatura) +  "\337 C");
 
   // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, VALOR CONSIDERADO COMO EL MAXIMO SUPERIOR ACEPTABLE
   if (CO2_PPM > 800)
