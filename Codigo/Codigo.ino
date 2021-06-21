@@ -207,37 +207,44 @@ void loop() {
     beep();
     startMillis = millis();
   }
-  else if (CO2_PPM > 3000 && elapsedMillis > 2000)
+  
+  if (CO2_PPM > 3000 && elapsedMillis > 2000)
   {
     beep();
     startMillis = millis();
   }
-  else if (CO2_PPM > 2500 && elapsedMillis > 5000)
+  
+  if (CO2_PPM > 2500 && elapsedMillis > 5000)
   {
     beep();
     startMillis = millis();
   }
-  else if (CO2_PPM > 2000 && elapsedMillis > 10000)
+  
+  if (CO2_PPM > 2000 && elapsedMillis > 10000)
   {
     beep();
     startMillis = millis();
   }
-  else if (CO2_PPM > 1500 && elapsedMillis > 15000)
+  
+  if (CO2_PPM > 1500 && elapsedMillis > 15000)
   {
     beep();
     startMillis = millis();
   }
-  else if (CO2_PPM > 1000 && elapsedMillis > 30000)
+  
+  if (CO2_PPM > 1000 && elapsedMillis > 30000)
   {
     beep();
     startMillis = millis();
   }
-  else if (CO2_PPM > 800 && elapsedMillis > 60000)
+  
+  if (CO2_PPM > 800 && elapsedMillis > 60000)
   {
     beep();
     startMillis = millis();
   }
-  else
+  
+  if (CO2_PPM <= 800)
   {
     startMillis = millis();
   }
