@@ -38,6 +38,11 @@ String Last_Line2 = "";
 int Line1_Position = 0;
 int Line2_Position = 0;
 
+// VARIABLES QUE MIDE EL TIEMPO ENTRE CADA BEEP SEGUN NIVEL DE CONCENTRACIÓN DE CO2
+unsigned long startMillis;
+unsigned long currentMillis;
+unsigned long elapsedMillis;
+
 // SIMBOLO DE GRADOS
 byte customChar[] = {
   B01110,
@@ -180,9 +185,6 @@ void setup() {
     PrintLCD("$LAST", String(porcentual) + "%");
     delay(300);
   }
-
-  // AVISO QUE SE INICIO
-  beep();
 }
 
 void loop() {
@@ -196,10 +198,50 @@ void loop() {
   // PRESENTO LA INFORMACION EN PANTALLA
   PrintLCD("CO2: " + String(CO2_PPM) + " PPM", String(humedad) + "%  " + String(temperatura) +  "\337 C");
 
-  // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, VALOR CONSIDERADO COMO EL MAXIMO SUPERIOR ACEPTABLE
-  if (CO2_PPM > 800)
+  // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, AUMENTANDO LA FRECUENCIA DE PITIDOS SEGUN CONCENTRACIÓN
+  currentMillis = millis();
+  elapsedMillis = (currentMillis - startMillis);
+
+  if (CO2_PPM > 5000 && elapsedMillis > 1000)
+  {
     beep();
+    startMillis = millis();
+  }
+  else if (CO2_PPM > 3000 && elapsedMillis > 2000)
+  {
+    beep();
+    startMillis = millis();
+  }
+  else if (CO2_PPM > 2500 && elapsedMillis > 5000)
+  {
+    beep();
+    startMillis = millis();
+  }
+  else if (CO2_PPM > 2000 && elapsedMillis > 10000)
+  {
+    beep();
+    startMillis = millis();
+  }
+  else if (CO2_PPM > 1500 && elapsedMillis > 15000)
+  {
+    beep();
+    startMillis = millis();
+  }
+  else if (CO2_PPM > 1000 && elapsedMillis > 30000)
+  {
+    beep();
+    startMillis = millis();
+  }
+  else if (CO2_PPM > 800 && elapsedMillis > 60000)
+  {
+    beep();
+    startMillis = millis();
+  }
+  else
+  {
+    startMillis = millis();
+  }
 
   // LOS CICLOS DE REFRESCO SON CADA 2 SEGUNDOS
-  delay(2000);
+  delay(1000);
 }
