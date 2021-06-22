@@ -44,114 +44,105 @@ unsigned long currentMillis;
 unsigned long elapsedMillis;
 
 // SIMBOLO DE GRADOS
-byte customChar[] = {
-  B01110,
-  B10001,
-  B10001,
-  B10001,
-  B01110,
+
+byte CaraMuyFeliz[] = {
   B00000,
+  B00000,
+  B01010,
+  B00000,
+  B11111,
+  B10001,
+  B01110,
+  B00000
+};
+
+byte CaraFeliz[] = {
+  B00000,
+  B00000,
+  B01010,
+  B00000,
+  B10001,
+  B01110,
   B00000,
   B00000
 };
 
-// FUNCION CREADA PARA HACERME LA VIDA MAS SIMPLE CON LAS PANTALLAS LCD
-void PrintLCD(String Line1 = "", String Line2 = "")
-{
-  String Temporal_Line1 = "";
-  String Temporal_Line2 = "";
-  bool NeedReferesh = false;
-  
-  if (Last_Line1 != Line1 || Last_Line2 != Line2)
-  {    
-    if (Line1 == "" && Line2 == "")
-      lcd.clear();
-    else
-    {
-      if (Line1 == "$LAST")
-        Line1 = Last_Line1;
+byte CaraNeutral[] = {
+  B00000,
+  B00000,
+  B01010,
+  B00000,
+  B00000,
+  B11111,
+  B00000,
+  B00000
+};
 
-      if (Line2 == "$LAST")
-        Line2 = Last_Line2;
-    
-      if (Last_Line1 != Line1)
-      {
-        Line1_Position = 0;
-        NeedReferesh = true;
-        lcd.home();
-        lcd.print("                ");
-      }
-      
-      if (Last_Line2 != Line2)
-      {
-        Line2_Position = 0;
-        NeedReferesh = true;
-        lcd.setCursor(0, 1);
-        lcd.print("                ");
-      }
-      
-      Temporal_Line1 = Line1;
-      Temporal_Line2 = Line2;
-    }
+byte CaraTriste[] = {
+  B00000,
+  B00000,
+  B01010,
+  B00000,
+  B01110,
+  B10001,
+  B00000,
+  B00000
+};
 
-    Last_Line1 = Line1;
-    Last_Line2 = Line2;
-  }
+byte CaraMuyTriste[] = {
+  B00000,
+  B00000,
+  B01010,
+  B00000,
+  B00000,
+  B10101,
+  B01010,
+  B00000
+};
 
-  if (Line1.length() > 16)
-  {
-    if (Line1_Position > 5)
-    {
-      Temporal_Line1 = String(Line1 + "                     ").substring(Line1_Position - 5);
-      NeedReferesh = true;
-      lcd.home();
-      lcd.print("               ");
-    }
-    else
-      Temporal_Line1 = Line1;
-    
-    if (Line1_Position > String(Line1 + "                     ").length() - 16)
-      Line1_Position = 0;
-    else
-      Line1_Position++;
-  }
-  else
-  {
-    Temporal_Line1 = Line1;
-  }
+byte CaraGritando[] = {
+  B00000,
+  B01010,
+  B00000,
+  B00100,
+  B01010,
+  B10001,
+  B01010,
+  B00100
+};
 
-  if (Line2.length() > 16)
-  {
-    if (Line2_Position > 5)
-    {
-      Temporal_Line2 = String(Line2 + "                     ").substring(Line2_Position - 5);
-      NeedReferesh = true;
-      lcd.setCursor(0, 1);
-      lcd.print("                ");
-    }
-    else
-      Temporal_Line2 = Line2;
-    
-    if (Line2_Position > String(Line2 + "                     ").length() - 16)
-      Line2_Position = 0;
-    else
-      Line2_Position++;
-  }
-  else
-  {
-    Temporal_Line2 = Line2;
-  }
+byte Gota[] = {
+  B00000,
+  B00100,
+  B01110,
+  B11111,
+  B11111,
+  B11111,
+  B01110,
+  B00000
+};
 
-  if (NeedReferesh == true)
-  {
-    lcd.home();
-    lcd.print(Temporal_Line1);
-    lcd.setCursor(0, 1);
-    lcd.print(Temporal_Line2);
+byte Termometro[] = {
+  B00100,
+  B01010,
+  B01010,
+  B01010,
+  B01110,
+  B11111,
+  B11111,
+  B01110
+};
 
-    delay(250);
-  }
-}
+byte Aire[] = {
+  B00000,
+  B00000,
+  B01000,
+  B10101,
+  B00010,
+  B01000,
+  B10101,
+  B00010
+};
 
 // FUNCION PARA HACER SONAR EL BEEPER ACTIVO
 void beep()
@@ -177,78 +168,187 @@ void setup() {
   pinMode(3, OUTPUT);
   digitalWrite(3, HIGH);
 
+  // CREO CARACTERES ESPECIALES
+  lcd.createChar(1, CaraMuyFeliz);
+  lcd.createChar(2, CaraFeliz);
+  lcd.createChar(3, CaraNeutral);
+  lcd.createChar(4, CaraTriste);
+  lcd.createChar(5, CaraMuyTriste);
+  lcd.createChar(6, CaraGritando);
+  lcd.createChar(7, Gota);
+  lcd.createChar(8, Termometro);
+  lcd.createChar(9, Aire);
+  
   // EL SENSOR DEBE CALENTAR PARA REALIZAR MEDICIONES CORRECTAR POR LO CUAL LE DOY 30 SEGUNDOS DE TIEMPO PARA DICHA TAREA
-  PrintLCD("CALENTANDO SENSOR...");
+  lcd.home();
+  lcd.print("Iniciando...");
   
   for (int porcentual = 0; porcentual <= 100; porcentual++)
   {
-    PrintLCD("$LAST", String(porcentual) + "%");
+    lcd.setCursor(0, 1);
+    lcd.print(String(porcentual) + "%");
     delay(300);
   }
+  
+  lcd.clear();
 }
 
 void loop() {
+  // LOS CICLOS DE REFRESCO SON CADA 1 SEGUNDOS
+  delay(1000);
+  
   // OBTENGO DATOS DE TEMPERATURA Y HUMEDAD DEL DHT11
   float humedad = dht.readHumidity();
   float temperatura = dht.readTemperature() + DHT_OFFSET;
-
+  char str[3];
+  
   // USO LOS DATOS DEL DTH11 PARA HACER CORRECCIONES DE MEDICION EN EL SENSOR MQ135 Y OBTENGO LAS PARTES POR MILLON DE CO2
   float CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
 
   // PRESENTO LA INFORMACION EN PANTALLA
-  PrintLCD("CO2: " + String(CO2_PPM) + " PPM", String(humedad) + "%  " + String(temperatura) +  "\337 C");
+  // ICONO DE AIRE
+  lcd.setCursor(0, 0);
+  lcd.write(9);
+
+  lcd.setCursor(1, 0);
+  lcd.print("              ");
+  lcd.setCursor(1, 0);
+  lcd.print(String(CO2_PPM) + " ppm");
+
+  // ICONO DE GOTA
+  lcd.setCursor(0, 1);
+  lcd.write(7);
+  
+  lcd.setCursor(1, 1);
+  lcd.print(String(dtostrf(humedad, 2, 1, str)) + "%");
+
+  // ICONO TERMOMETRO
+  lcd.setCursor(7, 1);
+  lcd.write(8);
+
+  lcd.setCursor(8, 1);
+  lcd.print(String(dtostrf(temperatura, 2, 1, str)) +  "\337c");
+
 
   // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, AUMENTANDO LA FRECUENCIA DE PITIDOS SEGUN CONCENTRACIÓN
   currentMillis = millis();
   elapsedMillis = (currentMillis - startMillis);
 
-  if (CO2_PPM > 5000 && elapsedMillis > 1000)
+  if (CO2_PPM > 5000)
   {
-    beep();
-    startMillis = millis();
+    if (elapsedMillis > 1000)
+    {
+      beep();
+      startMillis = millis();
+    }
+
+    lcd.setCursor(15, 0);
+    lcd.write(6);
+
+    return;
   }
   
   if (CO2_PPM > 3000 && elapsedMillis > 2000)
   {
-    beep();
-    startMillis = millis();
+    if (elapsedMillis > 2000)
+    {
+      beep();
+      startMillis = millis();
+    }
+
+    lcd.setCursor(15, 0);
+    lcd.write(6);
+
+    return;
   }
   
-  if (CO2_PPM > 2500 && elapsedMillis > 5000)
+  if (CO2_PPM > 2500)
   {
-    beep();
-    startMillis = millis();
+    if (elapsedMillis > 5000)
+    {
+      beep();
+      startMillis = millis();
+    }
+
+    lcd.setCursor(15, 0);
+    lcd.write(6);
+
+    return;
   }
   
-  if (CO2_PPM > 2000 && elapsedMillis > 10000)
+  if (CO2_PPM > 2000)
   {
-    beep();
-    startMillis = millis();
+    if (elapsedMillis > 10000)
+    {
+      beep();
+      startMillis = millis();
+    }
+
+    lcd.setCursor(15, 0);
+    lcd.write(5);
+
+    return;
   }
   
-  if (CO2_PPM > 1500 && elapsedMillis > 15000)
+  if (CO2_PPM > 1500)
   {
-    beep();
-    startMillis = millis();
+    if (elapsedMillis > 1500)
+    {
+      beep();
+      startMillis = millis();
+    }
+
+    lcd.setCursor(15, 0);
+    lcd.write(4);
+
+    return;
   }
   
-  if (CO2_PPM > 1000 && elapsedMillis > 30000)
+  if (CO2_PPM > 1000)
   {
-    beep();
-    startMillis = millis();
+    if (elapsedMillis > 30000)
+    {
+      beep();
+      startMillis = millis();
+    }
+
+    lcd.setCursor(15, 0);
+    lcd.write(3);
+
+    return;
   }
   
-  if (CO2_PPM > 800 && elapsedMillis > 60000)
+  if (CO2_PPM > 800)
   {
-    beep();
+    if (elapsedMillis > 60000)
+    {
+      beep();
+      startMillis = millis();
+    }
+    
+    lcd.setCursor(15, 0);
+    lcd.write(3);
+
+    return;
+  }
+
+  if (CO2_PPM <= 450)
+  {
     startMillis = millis();
+    
+    lcd.setCursor(15, 0);
+    lcd.write(2);
+
+    return;
   }
   
   if (CO2_PPM <= 800)
   {
     startMillis = millis();
-  }
 
-  // LOS CICLOS DE REFRESCO SON CADA 2 SEGUNDOS
-  delay(1000);
+    lcd.setCursor(15, 0);
+    lcd.write(2);
+
+    return;
+  }
 }
