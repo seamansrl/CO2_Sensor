@@ -216,14 +216,15 @@ void loop() {
       humedad = dht.readHumidity();
       humedad = (100/ 40 * humedad) - 25;
 
-      if (humedad > 90)
-        humedad = 90;
+      if (humedad > 100)
+        humedad = 100;
     }
     else
     {
       humedad = dht.readHumidity();
     }
-    
+
+    humedad = dht.readHumidity();
     temperatura = dht.readTemperature() + DHT_OFFSET;
     CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
  
@@ -316,7 +317,7 @@ void loop() {
   
   if (CO2_PPM > 1500)
   {
-    if (elapsedMillis > 1500)
+    if (elapsedMillis > 15000)
     {
       beep();
       startMillis = millis();
