@@ -12,6 +12,7 @@ LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
 // DEFINO TIPO DE SENSOR DE TEMPERATURA Y HUMEDAD
 #define DHTTYPE DHT11
+// #define DHTTYPE DHT22 // ES UN SENSOR MUCHO MEJOR
 
 // DEFINO EL PIN DONDE SE CONECTARA EL SENSOR MQ135
 #define MQ135_PIN 0
@@ -31,17 +32,20 @@ DHT dht(DHT_PIN, DHTTYPE);
 // DECLARO EL MQ-135
 MQ135 MQ135_SENSOR = MQ135(MQ135_PIN);
 
-// VARIABLES GLOBALES PARA PrintLCD
-String Last_Line1 = "";
-String Last_Line2 = "";
-
-int Line1_Position = 0;
-int Line2_Position = 0;
+// DECLARO LAS VARIABLES DE QUE SE USARAN PARA MEDIR 
+float humedad = 0;
+float temperatura = 0;
+float CO2_PPM = 0; 
 
 // VARIABLES QUE MIDE EL TIEMPO ENTRE CADA BEEP SEGUN NIVEL DE CONCENTRACIÓN DE CO2
 unsigned long startMillis;
 unsigned long currentMillis;
 unsigned long elapsedMillis;
+
+// VARIABLES QUE MIDE EL TIEMPO ENTRE CADA BEEP SEGUN NIVEL DE CONCENTRACIÓN DE CO2
+unsigned long ReadStartMillis;
+unsigned long ReadCurrentMillis;
+unsigned long ReadElapsedMillis;
 
 // SIMBOLO DE GRADOS
 
@@ -195,40 +199,60 @@ void setup() {
 
 void loop() {
   // LOS CICLOS DE REFRESCO SON CADA 1 SEGUNDOS
-  delay(1000);
+  delay(10);
+
+  ReadCurrentMillis = millis();
+  ReadElapsedMillis = ReadCurrentMillis - ReadStartMillis;
+
+  // LEO LOS SENSORES CADA 30 SEGUNDOS
   
-  // OBTENGO DATOS DE TEMPERATURA Y HUMEDAD DEL DHT11
-  float humedad = dht.readHumidity();
-  float temperatura = dht.readTemperature() + DHT_OFFSET;
-  char str[3];
+  if (ReadElapsedMillis >= 30000)
+  {
+    ReadStartMillis = millis();
+
+    if (DHTTYPE == DHT11)
+    {
+      // EL DHT11 ES UNA BASURA ASI QUE HACEMOS ALGUNAS MAGIAS COMO PARA QUE LA HUMEDAD ESTE MAS CERCA DE LA REALIDAD
+      humedad = dht.readHumidity();
+      humedad = (100/ 40 * humedad) - 25;
+
+      if (humedad > 90)
+        humedad = 90;
+    }
+    else
+    {
+      humedad = dht.readHumidity();
+    }
+    
+    temperatura = dht.readTemperature() + DHT_OFFSET;
+    CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
+ 
+    char str[3];
+   
+    // PRESENTO LA INFORMACION EN PANTALLA
+    // ICONO DE AIRE
+    lcd.setCursor(0, 0);
+    lcd.write(9);
   
-  // USO LOS DATOS DEL DTH11 PARA HACER CORRECCIONES DE MEDICION EN EL SENSOR MQ135 Y OBTENGO LAS PARTES POR MILLON DE CO2
-  float CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
-
-  // PRESENTO LA INFORMACION EN PANTALLA
-  // ICONO DE AIRE
-  lcd.setCursor(0, 0);
-  lcd.write(9);
-
-  lcd.setCursor(1, 0);
-  lcd.print("              ");
-  lcd.setCursor(1, 0);
-  lcd.print(String(CO2_PPM) + " ppm");
-
-  // ICONO DE GOTA
-  lcd.setCursor(0, 1);
-  lcd.write(7);
+    lcd.setCursor(1, 0);
+    lcd.print("              ");
+    lcd.setCursor(1, 0);
+    lcd.print(String(CO2_PPM) + " ppm");
   
-  lcd.setCursor(1, 1);
-  lcd.print(String(dtostrf(humedad, 2, 1, str)) + "%");
-
-  // ICONO TERMOMETRO
-  lcd.setCursor(7, 1);
-  lcd.write(8);
-
-  lcd.setCursor(8, 1);
-  lcd.print(String(dtostrf(temperatura, 2, 1, str)) +  "\337c");
-
+    // ICONO DE GOTA
+    lcd.setCursor(0, 1);
+    lcd.write(7);
+    
+    lcd.setCursor(1, 1);
+    lcd.print(String(dtostrf(humedad, 2, 1, str)) + "%");
+  
+    // ICONO TERMOMETRO
+    lcd.setCursor(7, 1);
+    lcd.write(8);
+  
+    lcd.setCursor(8, 1);
+    lcd.print(String(dtostrf(temperatura, 2, 1, str)) +  "\337c");
+  }
 
   // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, AUMENTANDO LA FRECUENCIA DE PITIDOS SEGUN CONCENTRACIÓN
   currentMillis = millis();
