@@ -204,9 +204,9 @@ void loop() {
   ReadCurrentMillis = millis();
   ReadElapsedMillis = ReadCurrentMillis - ReadStartMillis;
 
-  // LEO LOS SENSORES CADA 30 SEGUNDOS
+  // LEO LOS SENSORES CADA 5 SEGUNDOS
   
-  if (ReadElapsedMillis >= 30000)
+  if (ReadElapsedMillis >= 5000)
   {
     ReadStartMillis = millis();
 
@@ -226,8 +226,19 @@ void loop() {
 
     humedad = dht.readHumidity();
     temperatura = dht.readTemperature() + DHT_OFFSET;
-    CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad); 
- 
+
+    // DEPENDE DEL SENSOR LA ESCALA PUEDE QUE SE REQUIERA AJUSTAR ASI QUE.... BUENO, ESO...
+    // MULTIPLICO DE A 10 HASTA QUE LA MEDICION DE MAYOR A 100 YA QUE NUNCA HAY MENOS DE 100 PPM
+    // EN LA ATMOSFERA... MAL POR LOS HUMANOS PERO ES ASI.
+    
+    for (int Escala=1; Escala <=10000; Escala = Escala * 10)
+    {
+        CO2_PPM = MQ135_SENSOR.getCorrectedPPM(temperatura, humedad) * Escala; 
+
+        if (CO2_PPM > 100)
+          break;
+    }
+    
     char str[3];
    
     // PRESENTO LA INFORMACION EN PANTALLA
