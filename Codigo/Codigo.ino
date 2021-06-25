@@ -227,6 +227,10 @@ void loop() {
     humedad = dht.readHumidity();
     temperatura = dht.readTemperature() + DHT_OFFSET;
 
+    // IMPRIMO LA RZERO DE CALIBRACION
+    Serial.print("RZero: ");
+    Serial.println(MQ135_SENSOR.getRZero());
+    
     // DEPENDE DEL SENSOR LA ESCALA PUEDE QUE SE REQUIERA AJUSTAR ASI QUE.... BUENO, ESO...
     // MULTIPLICO DE A 10 HASTA QUE LA MEDICION DE MAYOR A 100 YA QUE NUNCA HAY MENOS DE 100 PPM
     // EN LA ATMOSFERA... MAL POR LOS HUMANOS PERO ES ASI.
