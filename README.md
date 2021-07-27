@@ -49,7 +49,7 @@ En resumen: si cumplimos con el distanciamiento social y el uso de mascarilla en
 
 
 # Pasos previos:
-Antes de empezar deberemos instalar las librerías ubicadas en la capeta “Liberia” en nuestro entorno Arduino.
+Antes de empezar deberemos instalar las librerías ubicadas en la carpeta “Librerias” en nuestro entorno Arduino.
 Por lo demás solo es conectar, cargar el código y disfrutar.
 
 # Calibración:
@@ -59,3 +59,12 @@ El sensor MQ135 es muy basico, solo consiste en una resistencia que varía segun
 2) Segun partida de sensores o marca es probable que varie el valor de la resistenciua interna del sensor, la llamada en el archivo MQ135.h como RZERO, algo que deberemos calibrar para tener mediciones correctas. Para ello nos llevaremos el equipo terminado al exterior (Balcon o terraza) y con el terminal abierto nos quedaremos viendo por al menos 10 a 15 minutos que el valor que se imprime en pantalla se estabilice en un numero. Ese numero es el que remplazaremos en RZero.
 
 Compilamos y cargamos en la arduino nuevamente con los valores detectados y si esta todo OK deberemos medir de 390ppm a 490ppm valores "normales" para una medicion al aire libre. 
+
+# Contactanos en:
+https://www.linkedin.com/company/35599193/admin/
+
+# Seguime en:
+https://www.linkedin.com/in/fernando-p-maniglia/
+
+# Conocenos más en:
+https://www.seamansrl.com.ar
