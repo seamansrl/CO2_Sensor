@@ -60,6 +60,10 @@ El sensor MQ135 es muy basico, solo consiste en una resistencia que varía segun
 
 Compilamos y cargamos en la arduino nuevamente con los valores detectados y si esta todo OK deberemos medir de 390ppm a 490ppm valores "normales" para una medicion al aire libre. 
 
+# Update 29-07-2021:
+Se implemento un modo de auto ajuste del RZero. Esto no implica que no se deba calibrar, pero si por alguna razon el valor registrado de CO2 en un ambiente cerrado y con el equipo bien calibrado da por debajo del nivel minimo de contamincion en la armosfera o sea la variable ATMOCO2, asumimos que la resistencia del sensor no tiene temperatura suficiente y esta midiendo mal por lo cual reasignamos el valor de RZero al valor medido. 
+En definitiva, si el nivel de CO2 medido es menor al indicado que deberia haber en la atmosfera al aire libre o sea la variable ATMOCO2, se reajusta la variable RZero al valor en curso para que la medicion tome como nueva cota minima dicho valor.
+
 # Contactanos en:
 https://www.linkedin.com/company/35599193/admin/
 
