@@ -239,7 +239,11 @@ void loop() {
           break;
     }
 
-    // IMPRIMO LA RZERO DE CALIBRACION
+    // IMPRIMO EL RZERO AJUSTADO
+    Serial.print(MQ135_SENSOR.SetedRZero());
+    Serial.print("|");
+    
+    // IMPRIMO LA RZERO DE MEDIDO
     Serial.print(MQ135_SENSOR.getRZero());
     Serial.print("|");
 
@@ -281,6 +285,18 @@ void loop() {
     lcd.setCursor(8, 1);
     lcd.print(String(dtostrf(temperatura, 2, 1, str)) +  "\337c");
   }
+
+
+  // ------------------------------------------------------------------------------------
+  // AUTOCALIBRACION OPCIONAL. ASUMIMOS QUE SI LA ATMOSFERA TIENE AL MENOS LO REGISTRADO EN ATMOCO2 COMO PPM DE CO2, TODO VALOR POR DEBAJO ESTARA MAL
+  // ASI QUE LO QUE HACEMOS ES REAJUSTAR EL RZERO AL NUEVO VALOR, PERO LO HACEMOS DE FORMA VOLATIL DE FORMA QUE SI ESA BAJO VALOR ES REAL SE PUEDA RESETEAR
+  if (CO2_PPM < MQ135_SENSOR.GetAtmos())
+  {
+    MQ135_SENSOR.SetRZero();
+
+    return;
+  }
+  // ------------------------------------------------------------------------------------
 
   // HAGO SONAR UNA ALERTA SI LA CONSENTRACION DE CO2 SUPERRA LOS 800, AUMENTANDO LA FRECUENCIA DE PITIDOS SEGUN CONCENTRACIÓN
   currentMillis = millis();
